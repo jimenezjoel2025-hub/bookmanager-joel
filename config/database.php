@@ -2,34 +2,44 @@
 
 class Database
 {
-    private string $host = '127.0.0.1';
-    private string $dbname = 'dblibreria';
-    private string $username = 'root';
-    private string $password = '';
-    private string $charset = 'utf8mb4';
+    private string $host;
+    private string $dbname;
+    private string $username;
+    private string $password;
 
     public function __construct()
     {
         $archivoLocal = __DIR__ . '/database.local.php';
+        $archivoProduccion = __DIR__ . '/database.production.php';
 
         if (file_exists($archivoLocal)) {
-            $config = require $archivoLocal;
-
-            $this->host = $config['host'] ?? $this->host;
-            $this->dbname = $config['dbname'] ?? $this->dbname;
-            $this->username = $config['username'] ?? $this->username;
-            $this->password = $config['password'] ?? $this->password;
+            $configuracion = require $archivoLocal;
+        } elseif (file_exists($archivoProduccion)) {
+            $configuracion = require $archivoProduccion;
+        } else {
+            throw new RuntimeException(
+                'No se encontró un archivo de configuración de base de datos.'
+            );
         }
+
+        $this->host = $configuracion['host'];
+        $this->dbname = $configuracion['dbname'];
+        $this->username = $configuracion['username'];
+        $this->password = $configuracion['password'];
     }
 
     public function connect(): PDO
     {
-        $dsn = "mysql:host={$this->host};dbname={$this->dbname};charset={$this->charset}";
+        $dsn = sprintf(
+            'mysql:host=%s;dbname=%s;charset=utf8mb4',
+            $this->host,
+            $this->dbname
+        );
 
         $opciones = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
+            PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
         return new PDO(
