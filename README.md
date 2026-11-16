@@ -1,40 +1,73 @@
 # BookManager
 
-BookManager es un sistema de gestión de librería desarrollado como proyecto final de Programación IV. Permite administrar las tiendas que distribuyen los libros y los títulos disponibles en el inventario.
+Sistema web para gestionar el inventario de una librería, desarrollado como proyecto final individual de **Programación IV**.
 
-## Autor
+La aplicación permite administrar tiendas y títulos mediante operaciones CRUD: crear, consultar, actualizar y eliminar registros. También relaciona cada título con una editorial registrada en la base de datos.
 
-**Joel Barrientos Jiménez**  
-Estudiante de Informática  
-Universidad Autónoma de Santo Domingo (UASD)
+## Datos del estudiante
 
-## Funcionalidades
+- **Estudiante:** Joel Barrientos Jiménez
+- **Matricula:** 100235966
+- **Asignatura:** Programación IV
+- **Universidad:** Universidad Autónoma de Santo Domingo (UASD)
+- **Proyecto:** Sistema de Gestión de Librería
+- **Fecha:** Noviembre de 2026
 
-El sistema cuenta con las siguientes funciones:
+## Sitio publicado
 
-- Panel principal con resumen de tiendas, títulos y editoriales.
-- Registro, consulta, edición y eliminación de tiendas.
-- Registro, consulta, edición y eliminación de títulos.
-- Selección de la editorial correspondiente a cada libro.
-- Validación de campos obligatorios.
-- Validación para impedir precios y existencias negativas.
-- Confirmación antes de eliminar registros.
-- Interfaz adaptable creada con Bootstrap 5.
+- **URL pública:** https://bookmanagerjoel.rf.gd
+- **Repositorio:** https://github.com/jimenezjoel2025-hub/bookmanager-joel
 
 ## Tecnologías utilizadas
 
-- PHP 8.4
+- PHP 8
 - Programación Orientada a Objetos
 - PDO
-- Sentencias preparadas
-- MariaDB / MySQL
+- MySQL y MariaDB
+- Bootstrap 5
 - HTML5
 - CSS3
-- Bootstrap 5
-- Bootstrap Icons
 - Git y GitHub
+- InfinityFree
 
-## Estructura del proyecto
+## Funcionalidades
+
+### Panel principal
+
+El panel muestra un resumen de los registros almacenados en la base de datos:
+
+- Cantidad de tiendas registradas.
+- Cantidad de títulos disponibles.
+- Cantidad de editoriales registradas.
+- Menú lateral para navegar entre los módulos.
+
+### Gestión de tiendas
+
+El módulo de tiendas permite:
+
+- Consultar las tiendas registradas.
+- Registrar una tienda nueva.
+- Editar los datos de una tienda.
+- Eliminar una tienda.
+- Validar que el nombre y los campos obligatorios no estén vacíos.
+- Mostrar mensajes de confirmación después de cada operación.
+
+### Gestión de títulos
+
+El módulo de títulos permite:
+
+- Consultar los libros registrados.
+- Registrar un título nuevo.
+- Editar los datos de un título.
+- Eliminar un título.
+- Seleccionar una editorial desde la tabla `publicadores`.
+- Validar que el precio y el stock no sean negativos.
+- Mostrar el precio en pesos dominicanos.
+- Mostrar mensajes de confirmación después de cada operación.
+
+## Arquitectura del proyecto
+
+El proyecto está organizado separando la conexión, los modelos, las vistas y los archivos comunes de la interfaz.
 
 ```text
 bookmanager-joel/
@@ -44,7 +77,8 @@ bookmanager-joel/
 ├── config/
 │   └── database.php
 ├── database/
-│   └── dblibreria.sql
+│   ├── dblibreria.sql
+│   └── dblibreria_infinityfree.sql
 ├── includes/
 │   ├── header.php
 │   └── footer.php
@@ -62,96 +96,6 @@ bookmanager-joel/
 │       ├── crear.php
 │       ├── editar.php
 │       └── eliminar.php
+├── .gitignore
 ├── index.php
 └── README.md
-```
-
-## Base de datos
-
-La base de datos se llama `dblibreria` y contiene las tablas:
-
-- `tiendas`
-- `titulos`
-- `publicadores`
-
-El archivo para crear la base de datos se encuentra en:
-
-```text
-database/dblibreria.sql
-```
-
-## Instalación local
-
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/jimenezjoel2025-hub/bookmanager-joel.git
-cd bookmanager-joel
-```
-
-### 2. Crear la base de datos
-
-Importa el archivo `database/dblibreria.sql` en MariaDB o MySQL.
-
-También se puede importar desde la terminal:
-
-```bash
-mariadb -u root -p < database/dblibreria.sql
-```
-
-### 3. Configurar la conexión
-
-Crea el archivo:
-
-```text
-config/database.local.php
-```
-
-El archivo debe retornar las credenciales locales:
-
-```php
-<?php
-
-return [
-    'host' => 'localhost',
-    'dbname' => 'dblibreria',
-    'username' => 'root',
-    'password' => 'TU_CONTRASEÑA',
-];
-```
-
-Este archivo está incluido en `.gitignore` para evitar que la contraseña sea publicada en GitHub.
-
-### 4. Iniciar el servidor local
-
-```bash
-php -S localhost:8000
-```
-
-Después visita:
-
-```text
-http://localhost:8000
-```
-
-## Arquitectura
-
-El proyecto utiliza Programación Orientada a Objetos. La clase `Database` se encarga de crear la conexión con la base de datos mediante PDO.
-
-Las clases `Tienda` y `Titulo` funcionan como modelos. Cada una contiene métodos separados para consultar, crear, actualizar y eliminar registros.
-
-Las consultas que reciben datos del usuario utilizan sentencias preparadas. Esto ayuda a proteger la aplicación contra ataques de inyección SQL.
-
-Las vistas se encargan de presentar los formularios y las tablas del sistema. El encabezado, el menú lateral y el pie de página se reutilizan mediante los archivos de la carpeta `includes`.
-
-## Seguridad
-
-- Las consultas utilizan PDO y sentencias preparadas.
-- Los datos mostrados se protegen con `htmlspecialchars`.
-- Los identificadores se validan antes de consultar o eliminar.
-- Las eliminaciones requieren confirmación.
-- Las contraseñas locales no se almacenan en GitHub.
-
-## Repositorio
-
-[BookManager en GitHub](https://github.com/jimenezjoel2025-hub/bookmanager-joel)
